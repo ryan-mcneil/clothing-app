@@ -1,7 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
-import { useRouteMatch } from 'react-router-dom';
 
 const config = {
   apiKey: "AIzaSyDS0aU_9WctlmSHs01hw_l3MB9pEeIQ0Ps",
@@ -24,7 +23,6 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   if(!snapShot.exists) {
     const { displayName, email }  = userAuth;
     const createdAt = new Date();
-
     try {
       await userRef.set({
         displayName,
@@ -37,7 +35,6 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     }
   }
 
-  console.log(snapShot);
   return userRef;
 }
 
