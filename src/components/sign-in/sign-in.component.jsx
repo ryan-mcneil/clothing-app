@@ -5,8 +5,6 @@ import CustomButton from '../custom-button/custom-button.component'
 
 import './sign-in.styles.scss';
 
-import SignInAndSignUpPage from '../../pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
-
 import { signInWithGoogle } from '../../firebase/firebase.utils'
 
 class SignIn extends React.Component {
@@ -54,7 +52,7 @@ class SignIn extends React.Component {
             label="password"
             required
           />
-          <div class='buttons'>
+          <div className='buttons'>
             <CustomButton type="submit">Sign In</CustomButton>
             <CustomButton onClick={signInWithGoogle} isGoogleSignIn>
               Sign In with Google

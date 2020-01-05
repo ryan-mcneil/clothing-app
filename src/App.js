@@ -7,7 +7,8 @@ import HomePage from './pages/homepage/homepage.component'
 import ShopPage from './pages/shop/shop.component'
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component'
 import Header from './components/header/header.component'
-import { auth } from './firebase/firebase.utils';
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+
 
 class App extends React.Component {
 
@@ -20,12 +21,27 @@ class App extends React.Component {
   }
 
   unsubscribeFromAuth = null
-
+  //when component renders
   componentDidMount() {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({ currentUser: user })
-      console.log(user);
-    })
+    // set this.unsubscribeFromAuth to the following function, to be called in the case of unmounting
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      // this callback function fires if the state of the userAuth has changed, and returns the userAuth
+      if (userAuth) {// if it returns the userAuth,
+        // get the reference
+        const userRef = await createUserProfileDocument(userAuth);
+        // now get the snapShot so that we can update the state
+        userRef.onSnapshot(snapShot => {
+          this.setState({
+            currentUser: {
+              id: snapShot.id,
+              ...snapShot.data()
+            }
+          });
+        });
+      }
+      //set CurrentUser as either the userAuth object, or null if onAuthStateChanged returned null
+      this.setState({ currentUser: userAuth})
+    });
   }
 
   componentWillUnmount() {
